@@ -12,6 +12,7 @@ var PORT = 3000;
 // Sets up the Express app to handle data parsing
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "Develop/public")));
 
 // Notes (DATA)
 // =============================================================
@@ -26,16 +27,17 @@ var notes = [
 // =============================================================
 
 // Basic route that sends the user first to the AJAX Page
-app.get("/", function(req, res) {
-  res.sendFile(path.join(__dirname, "notes.html"));
+app.get("/notes", function(req, res) {
+  res.sendFile(path.join(__dirname, "Develop/public/notes.html"));
 });
 
-app.get("/*", function(req, res) {
-  res.sendFile(path.join(__dirname, "index.html"));
+
+app.get("/", function(req, res) {
+  res.sendFile(path.join(__dirname, "Develop/public/index.html"));
 });
 
 // Displays a single note, or returns false
-app.get("/api/notes/:note", function(req, res) {
+app.get("/api/notes/", function(req, res) {
   var chosen = req.params.note;
 
   console.log(chosen);
@@ -54,14 +56,19 @@ app.post("/api/notes", function(req, res) {
   // req.body hosts is equal to the JSON post sent from the user
   // This works because of our body parsing middleware
   var newNote = req.body;
+  console.log(newNote)
 
   // Using a RegEx Pattern to remove spaces from newNote
   // You can read more about RegEx Patterns later https://www.regexbuddy.com/regex.html
-  newNote.routeName = newNote.name.replace(/\s+/g, "").toLowerCase();
+  // newNote.routeName = newNote.title.replace(/\s+/g, "").toLowerCase();
+
+  // note.title and note.text to push into db.JSON (do an fs.write to the db.JSON with the new note)..≥ if i write the note, it will overwrite.  so, first read, then write back
+
+  newNote.title = newNote.title.push
 
   console.log(newNote);
 
-  characters.push(newNote);
+  note.push(newNote);
 
   res.json(newNote);
 });
